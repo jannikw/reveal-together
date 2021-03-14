@@ -1,0 +1,24 @@
+{
+  "name": "reveal-together",
+  "version": "1.0.0",
+  "description": "Present a markdown based reveal.js presentation together",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node app.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "nunjucks": "^3.2.3",
+    "socket.io": "^4.0.0",
+    "uuid": "^8.3.2",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "chokidar": "^3.5.1"
+  }
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.css"
+      integrity="sha512-zu0eodDPCBAZf1vnIgwZ6qchMBt1xqgGkS9vBjVmunoH8pU7cc9OQKBiSQCclpvqySupy9Y1pLZc87VB40G4Sw=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/white.min.css"
+      integrity="sha512-4D8b66djW61D6twJNMNqyRrS8wCmCDyVQaME8E5CyGj2wRGsQUz6Y7qa2W0rEvYaaju9OHGxVPd173eBAaMAOQ=="
+      crossorigin="anonymous"
+    />
+    <title>Reveal Together</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"></div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.js"
+      integrity="sha512-LGXpHNR8kKb3liBoiowLefRfx9BahbZ0FWE8vfTOV3vU4jD/9SpoyZQ49rc7gBwSzbFTZAaLCsSkpujb6ic+Og=="
+      crossorigin="anonymous"
+    ></script>
+    >
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.1/marked.min.js"
+      integrity="sha512-pjhyz9DR7D4w90mc3iiAjhSRSmVrF3egxvfbOO6948qG0GACeOVpnP+xWEm7ihN5m1rg8tEHKRBhRrYEGhIR6Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.min.js"
+      integrity="sha512-eZZqO4ECmVvGhCt+6VZ7ian2bCu4S6yrjSFH9fXLY1zTokpAWsxAxQwM4x6+7G+G4ha5tFIe0jY0XjpBUqS49Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/math/math.min.js"
+      integrity="sha512-FUzQmRJDLL111zqJg/vN1YzQFQtZNWfBH2VaOiv30dXRXgaTRn3F/Ibda92klSAVjfz3Q9UqS88R4RF4Ip01fQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js"
+      integrity="sha512-dYHhQSvQ3Lepc2xDidh80aADfrIAaVTs52W5JSFlE47SJgcwD+YY+iY0XmXD9UX3k0YOPvoyugS/ieGjpu5M/Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/yaml-front-matter@4.1.1/dist/yamlFront.js"
+      integrity="sha256-GwAtF2r9+NidAHCLtmuor3ezema2o4MlEHKlO3lFMqs="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"
+      integrity="sha512-74AKPNm8Tfd5E9c4otg7XNkIVfIe5ynON7wehpX/9Tv5VYcZvXZBAlcgOAjLHg6HeWyLujisAnle6+iKnyWd9Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      async function init() {
+        // Download the markdown source
+        const url = "{{ markdownUrl }}";
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const text = await blob.text();
+
+        // Handle meta options as yaml front matter
+        const meta = yamlFront.loadFront(text);
+        const md = meta.__content;
+        const metaSlideOptions = meta.slideOptions || {};
+
+        // Compatibility with HedgeDoc's options:
+        // https://github.com/hedgedoc/hedgedoc/blob/91846ac9a602ccf805882f0706b46f5233eb1c71/public/js/slide.js#L79
+        const defaultOptions = {
+          controls: true,
+          progress: true,
+          slideNumber: true,
+          history: true,
+          center: true,
+          transition: "none",
+        };
+
+        const options = {
+          autoPlayMedia: metaSlideOptions.autoPlayMedia,
+          autoSlide: metaSlideOptions.autoSlide,
+          autoSlideStoppable: metaSlideOptions.autoSlideStoppable,
+          backgroundTransition: metaSlideOptions.backgroundTransition,
+          center: metaSlideOptions.center,
+          controls: metaSlideOptions.controls,
+          controlsBackArrows: metaSlideOptions.controlsBackArrows,
+          controlsLayout: metaSlideOptions.controlsLayout,
+          controlsTutorial: metaSlideOptions.controlsTutorial,
+          defaultTiming: metaSlideOptions.defaultTiming,
+          display: metaSlideOptions.display,
+          embedded: metaSlideOptions.embedded,
+          fragmentInURL: metaSlideOptions.fragmentInURL,
+          fragments: metaSlideOptions.fragments,
+          hash: metaSlideOptions.hash,
+          height: metaSlideOptions.height,
+          help: metaSlideOptions.help,
+          hideAddressBar: metaSlideOptions.hideAddressBar,
+          hideCursorTime: metaSlideOptions.hideCursorTime,
+          hideInactiveCursor: metaSlideOptions.hideInactiveCursor,
+          history: metaSlideOptions.history,
+          keyboard: metaSlideOptions.keyboard,
+          loop: metaSlideOptions.loop,
+          margin: metaSlideOptions.margin,
+          maxScale: metaSlideOptions.maxScale,
+          minScale: metaSlideOptions.minScale,
+          minimumTimePerSlide: metaSlideOptions.minimumTimePerSlide,
+          mobileViewDistance: metaSlideOptions.mobileViewDistance,
+          mouseWheel: metaSlideOptions.mouseWheel,
+          navigationMode: metaSlideOptions.navigationMode,
+          overview: metaSlideOptions.overview,
+          parallaxBackgroundHorizontal:
+            metaSlideOptions.parallaxBackgroundHorizontal,
+          parallaxBackgroundImage: metaSlideOptions.parallaxBackgroundImage,
+          parallaxBackgroundSize: metaSlideOptions.parallaxBackgroundSize,
+          parallaxBackgroundVertical:
+            metaSlideOptions.parallaxBackgroundVertical,
+          preloadIframes: metaSlideOptions.preloadIframes,
+          previewLinks: metaSlideOptions.previewLinks,
+          progress: metaSlideOptions.progress,
+          rtl: metaSlideOptions.rtl,
+          showNotes: metaSlideOptions.showNotes,
+          shuffle: metaSlideOptions.shuffle,
+          slideNumber: metaSlideOptions.slideNumber,
+          theme: metaSlideOptions.theme,
+          totalTime: metaSlideOptions.totalTime,
+          touch: metaSlideOptions.touch,
+          transition: metaSlideOptions.transition,
+          transitionSpeed: metaSlideOptions.transitionSpeed,
+          viewDistance: metaSlideOptions.viewDistance,
+          width: metaSlideOptions.width,
+        };
+
+        for (const key in options) {
+          if (
+            Object.prototype.hasOwnProperty.call(options, key) &&
+            options[key] === undefined
+          ) {
+            if (defaultOptions.hasOwnProperty(key)) {
+              options[key] = defaultOptions[key];
+            } else {
+              delete options[key];
+            }
+          }
+        }
+
+        console.log("slide options", options);
+
+        // Create a new element containg the markdown source
+        const section = document.createElement("section");
+        section.setAttribute("data-markdown", "");
+        section.setAttribute("data-separator", "^(\r\n?|\n)---(\r\n?|\n)$");
+        section.setAttribute(
+          "data-separator-vertical",
+          "^(\r\n?|\n)----(\r\n?|\n)$"
+        );
+        const textarea = section.appendChild(
+          document.createElement("textarea")
+        );
+        textarea.setAttribute("data-template", "");
+        textarea.innerHTML = md;
+        document.querySelector(".reveal > .slides").appendChild(section);
+
+        // Initialize reveal.js to start the presentation
+        Reveal.initialize({
+          ...options,
+          math: {
+            // mathjax:
+            //   "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+            config: "TeX-AMS_HTML-full",
+          },
+          plugins: [RevealMarkdown, RevealMath],
+        });
+
+        const socket = io.connect("{{ socketServerUrl }}", {
+          query: "token={{ id }}",
+        });
+        socket.on("slidechange", (data) => {
+          Reveal.setState(data.state);
+        });
+        //  {% if control %}
+        function post() {
+          var data = {
+            state: Reveal.getState(),
+          };
+
+          socket.emit("slidechange", data);
+        }
+
+        window.addEventListener("load", post);
+        Reveal.on("slidechanged", post);
+        Reveal.on("fragmentshown", post);
+        Reveal.on("fragmenthidden", post);
+        Reveal.on("overviewhidden", post);
+        Reveal.on("overviewshown", post);
+        Reveal.on("paused", post);
+        Reveal.on("resumed", post);
+        //  {% endif %}
+      }
+
+      init();
+    </script>
+  </body>
+</html>
