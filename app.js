@@ -141,3 +141,9 @@ app.get("/slides/:id", (req, res) => {
 server.listen(port);
 console.log(`server listening for client on port ${port}`);
 console.log(`app available at public url ${publicUrl}`);
+
+process.on("SIGINT", () => {
+    console.info("app stopped");
+    server.close();
+    process.exit(0);
+});
