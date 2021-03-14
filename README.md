@@ -13,10 +13,11 @@ Preferably use the docker image `jannikw/reveal-together:latest` from Docker Hub
 
 The following options can be specified using environment variables:
 
-| Variable     | Description                                                                                        | Default                  |
-| ------------ | -------------------------------------------------------------------------------------------------- | ------------------------ |
-| `PORT`       | The port to listen on                                                                              | `8888`                   |
-| `PUBLIC_URL` | The public URL the app can be accessed at. This is used for generating URLs displayed to the user. | `http://localhost:$PORT` |
+| Variable               | Description                                                                                        | Default                  |
+| ---------------------- | -------------------------------------------------------------------------------------------------- | ------------------------ |
+| `PORT`                 | The port to listen on                                                                              | `8888`                   |
+| `PUBLIC_URL`           | The public URL the app can be accessed at. This is used for generating URLs displayed to the user. | `http://localhost:$PORT` |
+| `SESSION_DURATION_MIN` | The number of minutes after which a session is cleaned up.                                         | 24 hours                 |
 
 ## Development
 

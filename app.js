@@ -9,12 +9,15 @@ import { isHttpUri, isHttpsUri } from "valid-url";
 import { Session } from "inspector";
 import _ from "lodash";
 
+const MIN_TO_MILLI_SEC = 1000 * 60;
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
 const port = process.env.PORT || 8888;
 const publicUrl = process.env.PUBLIC_URL || `http://localhost:${port}`;
+const sessionDuration = parseInt(process.env.SESSION_DURATION_MIN || 24 * 60);
 const sessions = new Map();
 
 nunjucks.configure(path.join(__dirname, "templates"), {
@@ -84,7 +87,6 @@ app.get("/", (req, res) => {
             return;
         }
 
-        console.log(`Creating session for ${markdownUrl}`);
         const privateId = uuid();
         const publicId = uuid();
         const session = {
@@ -99,9 +101,20 @@ app.get("/", (req, res) => {
                 socket.to(publicId).emit("slidechange", data);
             },
         };
+        console.log(`created session for ${markdownUrl}: ${privateId}`);
         session.post = _.throttle(session.post, 500);
         sessions.set(publicId, session);
         res.redirect("/share/" + privateId);
+
+        setTimeout(() => {
+            console.log(`cleaning up session ${privateId}`);
+            sessions.delete(publicId);
+            const socketIds = io.sockets.adapter.rooms.get(publicId) || [];
+            for (const id in socketIds) {
+                const socket = io.sockets.sockets.get(id);
+                socket.disconnect();
+            }
+        }, sessionDuration * MIN_TO_MILLI_SEC);
     } else {
         res.render("index.html");
     }
@@ -141,6 +154,9 @@ app.get("/slides/:id", (req, res) => {
 server.listen(port);
 console.log(`server listening for client on port ${port}`);
 console.log(`app available at public url ${publicUrl}`);
+console.log(
+    `keeping presentation session alive for ${sessionDuration} minutes`
+);
 
 process.on("SIGINT", () => {
     console.info("app stopped");
