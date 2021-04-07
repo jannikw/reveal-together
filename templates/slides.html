@@ -19,6 +19,12 @@
       integrity="sha512-4D8b66djW61D6twJNMNqyRrS8wCmCDyVQaME8E5CyGj2wRGsQUz6Y7qa2W0rEvYaaju9OHGxVPd173eBAaMAOQ=="
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/highlight/zenburn.min.css"
+      integrity="sha512-JPxjD2t82edI35nXydY/erE9jVPpqxEJ++6nYEoZEpX2TRsmp2FpZuQqZa+wBCen5U16QZOkMadGXHCfp+tUdg=="
+      crossorigin="anonymous"
+    />
     <style>
       /* Keep style from HedgeDoc */
       /* https://github.com/hedgedoc/hedgedoc/blob/91846ac9a602ccf805882f0706b46f5233eb1c71/public/css/slide.css */
@@ -93,7 +99,6 @@
         max-width: 100%;
         max-height: 100%;
       }
-      
 
       .slideshare .inner,
       .speakerdeck .inner {
@@ -380,7 +385,7 @@
 
       .print-pdf .footer {
         display: none;
-      } 
+      }
     </style>
     <title>Reveal Together</title>
   </head>
@@ -393,7 +398,6 @@
       integrity="sha512-LGXpHNR8kKb3liBoiowLefRfx9BahbZ0FWE8vfTOV3vU4jD/9SpoyZQ49rc7gBwSzbFTZAaLCsSkpujb6ic+Og=="
       crossorigin="anonymous"
     ></script>
-    >
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.1/marked.min.js"
       integrity="sha512-pjhyz9DR7D4w90mc3iiAjhSRSmVrF3egxvfbOO6948qG0GACeOVpnP+xWEm7ihN5m1rg8tEHKRBhRrYEGhIR6Q=="
@@ -412,6 +416,11 @@
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js"
       integrity="sha512-dYHhQSvQ3Lepc2xDidh80aADfrIAaVTs52W5JSFlE47SJgcwD+YY+iY0XmXD9UX3k0YOPvoyugS/ieGjpu5M/Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/highlight/highlight.min.js"
+      integrity="sha512-NA5UCab7xDKQPXGsmIp8iEuId5BAKGPiqHZsZQcBuySfp1n3dZrwBDKpPNL23Db5upay1nULxU14JV1ggFOD2A=="
       crossorigin="anonymous"
     ></script>
     <script
@@ -540,7 +549,7 @@
             //   "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
             config: "TeX-AMS_HTML-full",
           },
-          plugins: [RevealMarkdown, RevealMath],
+          plugins: [RevealMarkdown, RevealMath, RevealHighlight],
         });
 
         const socket = io.connect("{{ socketServerUrl }}", {
